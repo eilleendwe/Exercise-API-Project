@@ -8,6 +8,16 @@ async function getUsers() {
   return User.find({});
 }
 
+//Ngecek email apakah sudah ada atau belum
+async function checkEmail(email) {
+  const userEmail = await getUserByEmail(email);
+  if (userEmail !== null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 /**
  * Get user detail
  * @param {string} id - User ID
@@ -68,4 +78,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  checkEmail,
 };
