@@ -10,12 +10,7 @@ async function getUsers() {
 
 //Ngecek email apakah sudah ada atau belum
 async function checkEmail(email) {
-  const userEmail = await getUserByEmail(email);
-  if (userEmail !== null) {
-    return true;
-  } else {
-    return false;
-  }
+  return await User.checkEmail(email); // Menggunakan fungsi checkEmail dari usersRepository
 }
 
 /**
