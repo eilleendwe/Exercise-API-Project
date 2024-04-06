@@ -21,11 +21,6 @@ async function getUsers() {
   return results;
 }
 
-//check email
-async function checkEmail(email) {
-  return await usersRepository.checkEmail(email);
-}
-
 /**
  * Get user detail
  * @param {string} id - User ID
@@ -118,5 +113,4 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  checkEmail,
 };
