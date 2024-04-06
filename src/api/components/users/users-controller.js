@@ -51,20 +51,12 @@ async function createUser(request, response, next) {
     const email = request.body.email;
     const password = request.body.password;
 
-    const emailAda = await usersService.checkEmail(email);
-    if (emailAda) {
+    const success = await usersService.createUser(name, email, password);
+    if (!success) {
       throw errorResponder(
-        errorTypes.EMAIL_ALREADY_TAKEN,
-        'Email already exist'
+        errorTypes.UNPROCESSABLE_ENTITY,
+        'Failed to create user'
       );
-    } else {
-      const success = await usersService.createUser(name, email, password);
-      if (!success) {
-        throw errorResponder(
-          errorTypes.UNPROCESSABLE_ENTITY,
-          'Failed to create user'
-        );
-      }
     }
 
     return response.status(200).json({ name, email });
