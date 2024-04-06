@@ -9,6 +9,16 @@ async function getUserByEmail(email) {
   return User.findOne({ email });
 }
 
+async function checkEmail(email) {
+  const userEmail = await getUserByEmail(email);
+  if (userEmail !== null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 module.exports = {
   getUserByEmail,
+  checkEmail,
 };
