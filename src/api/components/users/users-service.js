@@ -23,7 +23,7 @@ async function getUsers() {
 
 //check email
 async function checkEmail(email) {
-  return await usersRepository.checkEmail({ email });
+  return await usersRepository.checkEmail(email);
 }
 
 /**

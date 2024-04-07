@@ -10,7 +10,7 @@ async function getUsers() {
 
 //Ngecek email apakah sudah ada atau belum
 async function checkEmail(email) {
-  const userEmail = await User.findOne(email);
+  const userEmail = await User.findOne({ email });
   if (userEmail !== null) {
     return true;
   } else {
