@@ -50,10 +50,11 @@ async function createUser(request, response, next) {
     const name = request.body.name;
     const email = request.body.email;
     const password = request.body.password;
+
     //membuat confirm password
     const password_confirm = request.body.password_confirm;
 
-    //jika password != dengan password_confirm maka error
+    //jika password !== dengan password_confirm maka error
     if (password !== password_confirm) {
       throw errorResponder(
         errorTypes.INVALID_PASSWORD,
@@ -67,12 +68,12 @@ async function createUser(request, response, next) {
     //kalau email sudah ada, maka cari email lain
     if (emailAda) {
       throw errorResponder(
-        errorTypes.UNPROCESSABLE_ENTITY,
-        'Failed to create user'
+        errorTypes.EMAIL_ALREADY_TAKEN,
+        'Email already exist!'
       );
+
       //kalau tidak ada, lanjutkan proses penggantian email
     } else {
-      //validasi password
       const success = await usersService.createUser(name, email, password);
       if (!success) {
         throw errorResponder(
