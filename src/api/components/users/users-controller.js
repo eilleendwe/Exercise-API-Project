@@ -50,13 +50,36 @@ async function createUser(request, response, next) {
     const name = request.body.name;
     const email = request.body.email;
     const password = request.body.password;
+    //membuat confirm password
+    const password_confirm = request.body.password_confirm;
 
-    const success = await usersService.createUser(name, email, password);
-    if (!success) {
+    //jika password != dengan password_confirm maka error
+    if (password !== password_confirm) {
+      throw errorResponder(
+        errorTypes.INVALID_PASSWORD,
+        'Password dan Confirm Password harus sama!'
+      );
+    }
+
+    //check email sudah ada apa belum di db
+    const emailAda = await usersService.checkEmail(email);
+
+    //kalau email sudah ada, maka cari email lain
+    if (emailAda) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
         'Failed to create user'
       );
+      //kalau tidak ada, lanjutkan proses penggantian email
+    } else {
+      //validasi password
+      const success = await usersService.createUser(name, email, password);
+      if (!success) {
+        throw errorResponder(
+          errorTypes.UNPROCESSABLE_ENTITY,
+          'Failed to create user'
+        );
+      }
     }
 
     return response.status(200).json({ name, email });
@@ -78,12 +101,20 @@ async function updateUser(request, response, next) {
     const name = request.body.name;
     const email = request.body.email;
 
-    const success = await usersService.updateUser(id, name, email);
-    if (!success) {
+    const emailAda = await usersService.checkEmail(email);
+    if (emailAda) {
       throw errorResponder(
-        errorTypes.UNPROCESSABLE_ENTITY,
-        'Failed to update user'
+        errorTypes.EMAIL_ALREADY_TAKEN,
+        'Email already exist'
       );
+    } else {
+      const success = await usersService.updateUser(id, name, email);
+      if (!success) {
+        throw errorResponder(
+          errorTypes.UNPROCESSABLE_ENTITY,
+          'Failed to update user'
+        );
+      }
     }
 
     return response.status(200).json({ id });

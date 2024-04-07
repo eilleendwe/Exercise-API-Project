@@ -8,6 +8,16 @@ async function getUsers() {
   return User.find({});
 }
 
+//Ngecek email apakah sudah ada atau belum
+async function checkEmail(email) {
+  const userEmail = await User.findOne({ email });
+  if (userEmail !== null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 /**
  * Get user detail
  * @param {string} id - User ID
