@@ -78,4 +78,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  checkEmail,
 };
