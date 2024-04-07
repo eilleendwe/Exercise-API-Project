@@ -51,12 +51,15 @@ async function createUser(request, response, next) {
     const email = request.body.email;
     const password = request.body.password;
 
+    //check email sudah ada apa belum di db
     const emailAda = await usersService.checkEmail(email);
+    //kalau email sudah ada, maka cari email lain
     if (emailAda) {
       throw errorResponder(
         errorTypes.EMAIL_ALREADY_TAKEN,
         'Email already exist'
       );
+      //kalau tidak ada, lanjutkan proses penggantian email
     } else {
       const success = await usersService.createUser(name, email, password);
       if (!success) {
