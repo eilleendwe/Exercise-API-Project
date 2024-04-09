@@ -1,4 +1,3 @@
-const { func } = require('joi');
 const { User } = require('../../../models');
 
 /**
@@ -80,8 +79,8 @@ async function getUserById(id) {
 
 //fungsi untuk megganti password user
 // patch existing user
-async function patchUser(id, password) {
-  return User.updateOne({ _id: id }, { $set: { password: password } });
+async function patchUser(id, new_password) {
+  return User.updateOne({ _id: id }, { $set: { password: new_password } });
 }
 
 module.exports = {
