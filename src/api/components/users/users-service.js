@@ -1,6 +1,5 @@
 const usersRepository = require('./users-repository');
 const { hashPassword } = require('../../../utils/password');
-const { func } = require('joi');
 const { passwordMatched } = require('../../../utils/password');
 
 /**
@@ -114,7 +113,7 @@ async function deleteUser(id) {
   return true;
 }
 
-//mengecek password lama (db) dengan password skrg
+//mengecek password lama (di database) dengan password skrg
 async function checkPassword(id, password) {
   const user = await usersRepository.getUserById(id);
 
@@ -128,6 +127,7 @@ async function checkPassword(id, password) {
   }
 }
 
+//fungsi untuk mengganti password
 async function gantiPassword(id, new_password) {
   const user = await usersRepository.getUserById(id);
 
@@ -135,6 +135,7 @@ async function gantiPassword(id, new_password) {
     return null;
   }
 
+  //meng hash password baru
   const hashedPassword = await hashPassword(new_password);
 
   try {

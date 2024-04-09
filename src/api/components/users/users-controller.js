@@ -172,7 +172,9 @@ async function patchUser(request, response, next) {
       );
     }
 
+    //variabel yang menentukan apakah sudah berhasil ganti password apa belum
     const success = await usersService.gantiPassword(id, new_password);
+    //jika tidak berhasil maka password gagal diganti
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -180,7 +182,8 @@ async function patchUser(request, response, next) {
       );
     }
 
-    return response.status(200).json({ message: 'Sukses' });
+    //password berhasil di ganti
+    return response.status(200).json({ message: 'Password berhasil diganti!' });
   } catch (error) {
     return next(error);
   }

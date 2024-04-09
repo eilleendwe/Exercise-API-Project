@@ -73,11 +73,13 @@ async function deleteUser(id) {
   return User.deleteOne({ _id: id });
 }
 
-//fungsi untuk checkPassword di service
+//fungsi getId untuk checkPassword di service
 async function getUserById(id) {
   return User.findById(id);
 }
 
+//fungsi untuk megganti password user
+// patch existing user
 async function patchUser(id, password) {
   return User.updateOne({ _id: id }, { $set: { password: password } });
 }
