@@ -1,5 +1,7 @@
 const usersRepository = require('./users-repository');
 const { hashPassword } = require('../../../utils/password');
+const { func } = require('joi');
+const { passwordMatched } = require('../../../utils/password');
 
 /**
  * Get list of users
@@ -112,6 +114,38 @@ async function deleteUser(id) {
   return true;
 }
 
+//mengecek password lama (db) dengan password skrg
+async function checkPassword(id, password) {
+  const user = await usersRepository.getUserById(id);
+
+  const userPassword = user ? user.password : '<RANDOM_PASSWORD_FILLER>';
+  const passwordChecked = await passwordMatched(password, userPassword);
+
+  if (passwordChecked) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+async function gantiPassword(id, new_password) {
+  const user = await usersRepository.getUserById(id);
+
+  if (!user) {
+    return null;
+  }
+
+  const hashedPassword = await hashPassword(new_password);
+
+  try {
+    await usersRepository.patchUser(id, hashedPassword);
+  } catch (err) {
+    return null;
+  }
+
+  return true;
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -119,4 +153,6 @@ module.exports = {
   updateUser,
   deleteUser,
   checkEmail,
+  checkPassword,
+  gantiPassword,
 };

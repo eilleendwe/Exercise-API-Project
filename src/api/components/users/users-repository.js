@@ -1,3 +1,4 @@
+const { func } = require('joi');
 const { User } = require('../../../models');
 
 /**
@@ -72,6 +73,15 @@ async function deleteUser(id) {
   return User.deleteOne({ _id: id });
 }
 
+//fungsi untuk checkPassword di service
+async function getUserById(id) {
+  return User.findById(id);
+}
+
+async function patchUser(id, password) {
+  return User.updateOne({ _id: id }, { $set: { password: password } });
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -79,4 +89,6 @@ module.exports = {
   updateUser,
   deleteUser,
   checkEmail,
+  getUserById,
+  patchUser,
 };

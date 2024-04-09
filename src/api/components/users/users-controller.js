@@ -149,10 +149,48 @@ async function deleteUser(request, response, next) {
   }
 }
 
+async function patchUser(request, response, next) {
+  try {
+    const id = request.params.id;
+    const password = request.body.password;
+    const new_password = request.body.new_password;
+    const new_password_confirm = request.body.new_password_confirm;
+
+    //check password
+    const passwordSama = await usersService.checkPassword(id, password);
+
+    //jika password skrg beda dengan yang lama (didb)
+    if (!passwordSama) {
+      throw errorResponder(errorTypes.INVALID_CREDENTIALS, 'Pass salah');
+    }
+
+    //password baru dan confirm password baru harus sama
+    if (new_password !== new_password_confirm) {
+      throw errorResponder(
+        errorTypes.INVALID_PASSWORD,
+        'Password dan Confirm Password harus sama!'
+      );
+    }
+
+    const success = await usersService.gantiPassword(id, new_password);
+    if (!success) {
+      throw errorResponder(
+        errorTypes.UNPROCESSABLE_ENTITY,
+        'Failed to update password'
+      );
+    }
+
+    return response.status(200).json({ message: 'Sukses' });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  patchUser,
 };
