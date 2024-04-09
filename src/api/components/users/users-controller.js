@@ -161,7 +161,7 @@ async function patchUser(request, response, next) {
 
     //jika password skrg beda dengan yang lama (didb)
     if (!passwordSama) {
-      throw errorResponder(errorTypes.INVALID_CREDENTIALS, 'Pass salah');
+      throw errorResponder(errorTypes.INVALID_CREDENTIALS, 'Password salah');
     }
 
     //password baru dan confirm password baru harus sama
