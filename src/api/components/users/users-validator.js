@@ -1,11 +1,22 @@
 const joi = require('joi');
+const { joiPasswordExtendCore } = require('joi-password');
+const joiPassword = joi.extend(joiPasswordExtendCore);
 
 module.exports = {
   createUser: {
     body: {
       name: joi.string().min(1).max(100).required().label('Name'),
       email: joi.string().email().required().label('Email'),
-      password: joi.string().min(6).max(32).required().label('Password'),
+      password: joiPassword
+        .string()
+        .min(6)
+        .max(32)
+        .minOfSpecialCharacters(1)
+        .minOfLowercase(1)
+        .minOfNumeric(1)
+        .minOfUppercase(1)
+        .required()
+        .label('Password'),
 
       //untuk validasi input password_confirm
       password_confirm: joi
